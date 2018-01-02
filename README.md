@@ -2,6 +2,8 @@
 
 Heliomorpha is for calculating the value of your crypto currencies. You tell it how much of any given crypto currency you have and it will calculate the current value in fiat.
 
+![Example output heliomorpha](https://i.imgur.com/OI4bA3r.png)
+
 ## Installation
 
 This script requires the following python libraries:
