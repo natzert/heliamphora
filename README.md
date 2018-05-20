@@ -10,9 +10,9 @@ Also, this seems to be about 75% faster than the python version so I'm very happ
 
 To build this you'll need the following packages:
 
-github.com/bclicn/color
-github.com/olekukonko/tablewriter
-github.com/spf13/viper
+* github.com/bclicn/color
+* github.com/olekukonko/tablewriter
+* github.com/spf13/viper
 
 ## Configuration
 
