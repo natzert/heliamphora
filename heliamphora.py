@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import sys
 import os
 import requests
 import json
@@ -45,7 +44,7 @@ def price_calc(currency, amount):
   day = trend_format(coin_dict[0]['percent_change_24h'])
   week = trend_format(coin_dict[0]['percent_change_7d'])
 
-  final_data.append([currency, cur_price, value, hour, day, week])
+  final_data.append([currency, cur_price, ammount, value, hour, day, week])
 
 def total_value():
   sum = 0
@@ -57,11 +56,29 @@ for currency, ammount in sorted(balances.iteritems(), key=lambda (k,v): (v,k)):
   price_calc(currency, ammount)
 
 final_data.append([None, None])
-final_data.append(['Gross', None, total_value()])
-final_data.append(['Exp', None, invested])
-final_data.append(['Net', None, trend_format(str(total_value() + invested))])
+final_data.append(['Gross', None, None, total_value()])
+final_data.append(['Exp', None, None, invested])
+final_data.append(['Net', None, None, trend_format(str(total_value() + invested))])
 
-print tabulate(final_data, headers=['Coin', 'Price', 'Balance', '1h', '1d', '1w'], floatfmt=".2f")
+print tabulate(final_data, headers=[
+        'Coin',
+        'Price',
+        'Amount',
+        'Balance',
+        '1h',
+        '1d',
+        '1w'
+    ],
+    floatfmt=(
+        ".2f",
+        ".2f",
+        ".8f",
+        ".2f",
+        ".2f",
+        ".2f",
+        ".2f"
+    )
+    )
 
 print
 print "All prices displayed in {0}".format(fiat_currency)
