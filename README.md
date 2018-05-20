@@ -2,7 +2,7 @@
 
 Heliamphora is for calculating the value of your crypto currencies. You tell it how much of any given crypto currency you have and it will calculate the current value in fiat.
 
-![Example output heliamphora](https://i.imgur.com/OI4bA3r.png)
+![Example output heliamphora](https://i.imgur.com/252K0Y3.png)
 
 ## Installation
 
