@@ -8,9 +8,9 @@ Heliamphora is for calculating the value of your crypto currencies. You tell it 
 
 This script requires the following python libraries:
 
-requests
-tabulate
-termcolor
+* requests
+* tabulate
+* termcolor
 
 ## Configuration
 
