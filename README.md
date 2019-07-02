@@ -57,4 +57,3 @@ TWD
 USD
 ZAR
 ```
-
