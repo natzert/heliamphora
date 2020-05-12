@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import requests
 import json
 import ConfigParser
@@ -21,30 +22,44 @@ input_data = p.as_dict()
 balances = input_data['balances']
 invested = float(input_data['general']['invested'])
 fiat_currency = input_data['general']['fiat_currency']
+api_key = input_data['general']['api_key']
 
 totals = []
 final_data = []
 
 def trend_format(input):
-  if input.startswith("-"):
+  if str(input).startswith("-"):
     return colored(input, 'red')
   else:
     return colored(input, 'green')
 
-def price_calc(currency, amount):
-  coin_data = requests.get('https://api.coinmarketcap.com/v1/ticker/{0}/?convert={1}'.format(currency, fiat_currency))
-  coin_dict = json.loads(coin_data.text)
-  price_key = 'price_{0}'.format(fiat_currency.lower())
+def coin_index(list, key, value):
+  for i, dic in enumerate(list):
+    if dic[key] == value:
+      return i
+  return -1
 
-  cur_price = coin_dict[0][price_key]
-  value = float(ammount) * float(cur_price)
-  totals.append(value)
+def price_calc():
+  headers = {'X-CMC_PRO_API_KEY': api_key}
+  coin_data = requests.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?convert={0}'.format('USD'), headers=headers)
+  coin_dict = coin_data.json()
 
-  hour = trend_format(coin_dict[0]['percent_change_1h'])
-  day = trend_format(coin_dict[0]['percent_change_24h'])
-  week = trend_format(coin_dict[0]['percent_change_7d'])
+  last_dict_effort = {}
+  last_dict_effort['data'] = []
 
-  final_data.append([currency, cur_price, ammount, value, hour, day, week])
+  for coin, ammount in balances.items():
+    index = coin_index(coin_dict['data'], "slug", coin)
+    last_dict_effort['data'].append(coin_dict['data'][index])
+
+    cur_price = coin_dict['data'][index]['quote']['USD']['price']
+    value = float(ammount) * float(cur_price)
+    totals.append(value)
+
+    hour = trend_format(coin_dict['data'][index]['quote']['USD']['percent_change_1h'])
+    day = trend_format(coin_dict['data'][index]['quote']['USD']['percent_change_24h'])
+    week = trend_format(coin_dict['data'][index]['quote']['USD']['percent_change_7d'])
+
+    final_data.append([coin, cur_price, ammount, value, hour, day, week])
 
 def total_value():
   sum = 0
@@ -52,8 +67,7 @@ def total_value():
     sum += x
   return sum
 
-for currency, ammount in sorted(balances.iteritems(), key=lambda (k,v): (v,k)):
-  price_calc(currency, ammount)
+price_calc()
 
 final_data.append([None, None])
 final_data.append(['Gross', None, None, total_value()])
